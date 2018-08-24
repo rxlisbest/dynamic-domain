@@ -3,4 +3,5 @@ return {
             port = 6379,
             user = "root",
             password = "root",
+            prefix = 'dd_',
         }
