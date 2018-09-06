@@ -1,7 +1,16 @@
+package.cpath = ngx.var.lua_dir .. "lib/?.so;;"
+package.path = ngx.var.lua_dir .. "?.lua;;"
+local cjson = require "cjson"
+if true then
+    local test = {}
+    test['a'] = 1
+    ngx.say(cjson.encode(test))
+    return
+end
+
 ngx.req.read_body()
 local postargs = ngx.req.get_post_args()
-postargs["test"]
-return
+ngx.say(postargs["test"])
 local mysql = require "lib.resty.mysql"
 local mysql_config = require "config.mysql"
 
@@ -46,5 +55,6 @@ end
 if res == ngx.null then
     return
 else
+    return 
 end
 

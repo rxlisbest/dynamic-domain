@@ -1,3 +1,19 @@
+package.cpath = ngx.var.lua_dir .. "lib/?.so;;"
+package.path = ngx.var.lua_dir .. "?.lua;;"
+local cjson = require "cjson"
+if true then
+    local test = {}
+    test['a'] = 1
+    ngx.say(cjson.encode(test))
+    return
+end
+
+if true then
+    local test = {}
+    test['a'] = 1
+    ngx.say(ngx.var.lua_dir)
+    return
+end
 local redis = require "lib.resty.redis"
 local red = redis:new()
 local redis_config = require "config.redis"
@@ -6,6 +22,7 @@ if not ok then
     ngx.say("failed to connect: ", err)
     return
 end
+
 
 local res, err = red:get(redis_config.prefix .. ngx.var.host)
 if not res then
