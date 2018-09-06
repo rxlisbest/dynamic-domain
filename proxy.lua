@@ -1,19 +1,5 @@
 package.cpath = ngx.var.lua_dir .. "lib/?.so;;"
 package.path = ngx.var.lua_dir .. "?.lua;;"
-local cjson = require "cjson"
-if true then
-    local test = {}
-    test['a'] = 1
-    ngx.say(cjson.encode(test))
-    return
-end
-
-if true then
-    local test = {}
-    test['a'] = 1
-    ngx.say(ngx.var.lua_dir)
-    return
-end
 local redis = require "lib.resty.redis"
 local red = redis:new()
 local redis_config = require "config.redis"
@@ -22,7 +8,6 @@ if not ok then
     ngx.say("failed to connect: ", err)
     return
 end
-
 
 local res, err = red:get(redis_config.prefix .. ngx.var.host)
 if not res then
@@ -43,7 +28,7 @@ if res == ngx.null then
         ngx.say("failed to connect: ", err, ": ", errcode, " ", sqlstate)
         return
     end
-    local sql = string.format("SELECT b.name, b.user_id, bd.domain FROM %sbucket_domain bd LEFT JOIN %sbucket b ON b.id = bd.bucket_id WHERE bd.domain = '%s'", mysql_config.prefix, mysql_config.prefix, ngx.var.host)
+    local sql = "SELECT * FROM map WHERE domain = '" .. ngx.var.host .. "'"
 
     local res, err, errno, sqlstate = db:query(sql)
     db:close()
@@ -53,9 +38,8 @@ if res == ngx.null then
         return
     end
     if #res > 0 then
-        local dir = string.format("/%s/%s/", res[1]['user_id'], res[1]['name'])
-        ok, err = red:set(redis_config.prefix .. ngx.var.host, dir)
-        ngx.exec(dir .. string.sub(ngx.var.uri, 2))
+        ok, err = red:set(redis_config.prefix .. ngx.var.host, res[1]['directory'])
+        ngx.exec(res[1]['directory'] .. string.sub(ngx.var.uri, 2))
     end
     return
 else
