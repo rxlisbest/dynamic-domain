@@ -1,5 +1,5 @@
 # dynamic-domain
-#### 项目需求
+#### 项目需要
 - linux
 - openresty
 
