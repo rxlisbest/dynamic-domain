@@ -2,6 +2,7 @@
 #### 部署步骤
 - git clone https://github.com/rxlisbest/dynamic-domain
 - 新建数据库:dynamic_domain 
+- 数据库中执行脚本:dynamic_domain.sql
 - 修改数据库配置文件config/mysql.lua
 ```
 return {
