@@ -1,4 +1,8 @@
 # dynamic-domain
+#### 项目需求
+- linux
+- openresty
+
 #### 部署步骤
 - git clone https://github.com/rxlisbest/dynamic-domain
 - 新建数据库:dynamic_domain 
@@ -27,7 +31,7 @@ return {
             auth = '',
         }
 ```
-- 修改nginx配置如下:
+- 修改nginx.conf如下:
 ```
     geo $lua_dir {
        default "lua项目目录"; # must-have
