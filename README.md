@@ -2,6 +2,8 @@
 #### 项目需要
 - linux
 - openresty
+- mysql
+- redis
 
 #### 部署步骤
 - git clone https://github.com/rxlisbest/dynamic-domain
