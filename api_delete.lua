@@ -29,9 +29,6 @@ local post = ngx.req.get_post_args()
 if post['domain'] == nil then
     return e('Parameter domain can not empty.')
 end
-if post['directory'] == nil then
-    return e('Parameter directory can not empty.')
-end
 
 local mysql = require "lib.resty.mysql"
 local mysql_config = require "config.mysql"
@@ -44,21 +41,34 @@ local ok, err, errcode, sqlstate = db:connect(mysql_config)
 if not ok then
     return e("failed to connect: ", err, ": ", errcode, " ", sqlstate)
 end
-local sql = string.format( "INSERT INTO map (domain, directory) VALUES ('%s', '%s')", post['domain'], post['directory'])
 
+local sql = string.format( "SELECT * FROM map WHERE domain = '%s'", post['domain'])
 local res, err, errno, sqlstate = db:query(sql)
-db:close()
--- ngx.say(#res)
+if #res <= 0 then
+    return e("Record does not exist")
+end
+
+sql = string.format( "DELETE FROM map WHERE domain = '%s'", post['domain'])
+res, err, errno, sqlstate = db:query(sql)
 if not res then
     return e(err)
 end
+
+db:close()
+
 local redis = require "lib.resty.redis"
+redis.add_commands("del")
 local red = redis:new()
 local redis_config = require "config.redis"
 local ok, err = red:connect(redis_config.host, redis_config.port)
 if not ok then
-    ngx.say("failed to connect: ", err)
-    return
+    return e("failed to connect: ", err)
 end
-ok, err = red:set(redis_config.prefix .. post['domain'], post['directory'])
+if redis_config.auth ~= '' then
+    local res, err = red:auth("foobared")
+    if not res then
+        return e("failed to authenticate: ", err)
+    end
+end
+ok, err = red:del(redis_config.prefix .. post['domain'])
 return s('ok')

@@ -4,4 +4,5 @@ return {
             user = "root",
             password = "root",
             prefix = 'dd_',
+            auth = '',
         }
