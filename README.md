@@ -30,7 +30,7 @@ return {
 - 修改nginx配置如下:
 ```
     geo $lua_dir {
-       default "项目下载目录"; # must-have
+       default "lua项目目录"; # must-have
     }
     server {
         listen 80;
@@ -62,3 +62,19 @@ return {
     }
 ```
 - 启动nginx服务
+#### 接口调用
+- 新增
+```
+action: http://localhost/api/add
+method: POST
+content-type: application/x-www-form-urlencoded 
+param: domain
+param: directory
+```
+- 删除
+```
+action: http://localhost/api/delete
+method: POST
+content-type: application/x-www-form-urlencoded 
+param: domain
+```
