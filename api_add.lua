@@ -1,7 +1,7 @@
 package.cpath = ngx.var.lua_dir .. "lib/?.so;;"
 package.path = ngx.var.lua_dir .. "?.lua;;"
-local cjson = require "cjson"
 
+local cjson = require "cjson"
 function e(message)
     local r = {}
     r['code'] = 0 
